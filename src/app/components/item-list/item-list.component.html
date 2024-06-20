@@ -1,1 +1,25 @@
-<p>item-list works!</p>
+
+<h2>Items List</h2>
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Category</th>
+    <th>Size</th>
+    <th>Color</th>
+    <th>Quantity</th>
+    <th>Price</th>
+    <th>Actions</th>
+  </tr>
+  <tr *ngFor="let item of items">
+    <td>{{ item.name }}</td>
+    <td>{{ item.category }}</td>
+    <td>{{ item.size }}</td>
+    <td>{{ item.color }}</td>
+    <td>{{ item.quantity }}</td>
+    <td>{{ item.price }}</td>
+    <td>
+      <button (click)="deleteItem(item._id)">Delete</button>
+      <button [routerLink]="['/edit-item', item._id]">Edit</button>
+    </td>
+  </tr>
+</table>
