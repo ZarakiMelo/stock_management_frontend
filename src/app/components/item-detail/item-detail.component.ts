@@ -1,12 +1,23 @@
-import { Component } from '@angular/core';
+// src/app/components/item-detail/item-detail.component.ts
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { ItemService } from '../../services/item.service';
+import { Item } from '../../models/item.model';
 
 @Component({
   selector: 'app-item-detail',
-  standalone: true,
-  imports: [],
   templateUrl: './item-detail.component.html',
-  styleUrl: './item-detail.component.css'
+  styleUrls: ['./item-detail.component.css']
 })
-export class ItemDetailComponent {
+export class ItemDetailComponent implements OnInit {
+  item: Item | undefined;
 
+  constructor(private route: ActivatedRoute, private itemService: ItemService) {}
+
+  ngOnInit(): void {
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) {
+      this.itemService.getItem(id).subscribe(item => this.item = item);
+    }
+  }
 }
