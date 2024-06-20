@@ -1,1 +1,17 @@
-<p>item-form works!</p>
+<!-- src/app/components/item-form/item-form.component.html -->
+<h2>{{ isEditMode ? 'Edit' : 'Add' }} Item</h2>
+<form [formGroup]="itemForm" (ngSubmit)="onSubmit()">
+  <label for="name">Name:</label>
+  <input id="name" formControlName="name">
+  <label for="category">Category:</label>
+  <input id="category" formControlName="category">
+  <label for="size">Size:</label>
+  <input id="size" formControlName="size">
+  <label for="color">Color:</label>
+  <input id="color" formControlName="color">
+  <label for="quantity">Quantity:</label>
+  <input id="quantity" formControlName="quantity" type="number">
+  <label for="price">Price:</label>
+  <input id="price" formControlName="price" type="number">
+  <button type="submit">{{ isEditMode ? 'Update' : 'Add' }}</button>
+</form>
