@@ -1,10 +1,13 @@
 <<<<<<< HEAD
-# stock_management_frontend
 frontend of stock management application
 =======
 # StockManagementFrontend
 
+This repository contains the frontend of a stock management application built on the Nest.js/Angular stack. To run the corresponding backend, please visit [this link](https://github.com/ZarakiMelo/stock_management_backend).
+
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.0.4.
+
 
 ## Development server
 
