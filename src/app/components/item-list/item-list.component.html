@@ -1,16 +1,19 @@
-<!-- src/app/components/item-list/item-list.component.html -->
-<div>
-  <select [(ngModel)]="filter" (change)="onCategoryChange($event)">
-    <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
-  </select>
-  <ul>
-    <li *ngFor="let item of items | itemFilter:filter">
+
+  <div class="filter_container">
+    <select class="filter" [(ngModel)]="filter" (change)="onCategoryChange($event)">
+        <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
+      </select>
+  </div>
+  
+  <div class="item-list-container">
+
+    <div class="item-card" *ngFor="let item of items | itemFilter:filter">
       <h3>{{ item.name }}</h3>
       <p>Catégorie: {{ item.category }}</p>
       <p>Taille: {{ item.size }}</p>
       <p>Couleur: {{ item.color }}</p>
       <p>Quantité: {{ item.quantity }}</p>
-      <button (click)="deleteItem(item._id)">Supprimer</button>
-    </li>
-  </ul>
+      <button *ngIf="item._id" class="delete-button" (click)="deleteItem(item._id)">Supprimer</button>
+    </div>
+ 
 </div>

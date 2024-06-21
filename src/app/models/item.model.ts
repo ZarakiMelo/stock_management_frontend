@@ -1,6 +1,6 @@
 
 export interface Item {
-    _id: string;
+    _id?: string;
     name: string;
     category: string;
     size: string;

@@ -1,3 +1,10 @@
 <!-- src/app/pages/home/home.component.html -->
-<app-item-list></app-item-list>
-<a routerLink="/add">Ajouter un article</a>
+<div class="container">
+   
+    <div class="form_container">
+      <button class="add_button" (click)="toggleForm()" *ngIf="!showForm">Ajouter un article</button>
+      <app-item-form *ngIf="showForm" (itemAdded)="handleItemAdded($event)" (cancel)="cancelForm()"></app-item-form>
+    </div>
+     <app-item-list></app-item-list>
+  </div>
+  

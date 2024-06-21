@@ -10,6 +10,6 @@ export class ItemFilterPipe implements PipeTransform {
     if (!items || !filter) {
       return items;
     }
-    return items.filter(item => item.name.toLowerCase().includes(filter.toLowerCase()));
+    return items.filter(item => item.category.toLowerCase().includes(filter.toLowerCase()));
   }
 }

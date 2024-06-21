@@ -1,53 +1,54 @@
 // src/app/components/item-form/item-form.component.ts
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ItemService } from '../../services/item.service';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { Item } from '../../models/item.model';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ItemService } from '../../services/item.service';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-item-form',
   templateUrl: './item-form.component.html',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
-  styleUrls: ['./item-form.component.css']
+  imports: [CommonModule, FormsModule],
+  styleUrls: ['./item-form.component.css'],
 })
-export class ItemFormComponent implements OnInit {
-  itemForm: FormGroup;
-  itemId: string | null = null;
+export class ItemFormComponent {
+  @Output() itemAdded = new EventEmitter<Item>();
+  @Output() cancel = new EventEmitter<void>();
 
-  constructor(
-    private fb: FormBuilder,
-    private itemService: ItemService,
-    private route: ActivatedRoute,
-    private router: Router
-  ) {
-    this.itemForm = this.fb.group({
-      name: ['', Validators.required],
-      category: ['', Validators.required],
-      size: ['', Validators.required],
-      color: ['', Validators.required],
-      quantity: [0, [Validators.required, Validators.min(1)]]
+  newItem: Item = {
+    name: '',
+    category: '',
+    size: '',
+    color: '',
+    quantity: 0,
+    price: 0
+  };
+
+  constructor(private itemService: ItemService) {}
+
+  addItem(): void {
+    console.log('Form submitted'); // Ajoutez ceci pour vérifier si la méthode est appelée
+    this.itemService.addItem(this.newItem).subscribe(item => {
+      console.log('Item added:', item); // Ajoutez ceci pour vérifier la réponse de l'API
+      this.itemAdded.emit(item);
+      this.resetForm();
     });
   }
+  
 
-  ngOnInit(): void {
-    this.itemId = this.route.snapshot.paramMap.get('id');
-    if (this.itemId) {
-      this.itemService.getItemById(this.itemId).subscribe(item => this.itemForm.patchValue(item));
-    }
+  resetForm(): void {
+    this.newItem = {
+      name: '',
+      category: '',
+      size: '',
+      color: '',
+      quantity: 0,
+      price: 0
+    };
   }
 
-  onSubmit(): void {
-    if (this.itemForm.valid) {
-      const item: Item = this.itemForm.value;
-      if (this.itemId) {
-        this.itemService.updateItem(this.itemId, item).subscribe(() => this.router.navigate(['/']));
-      } else {
-        this.itemService.addItem(item).subscribe(() => this.router.navigate(['/']));
-      }
-    }
+  onCancel(): void {
+    this.cancel.emit();
   }
 }

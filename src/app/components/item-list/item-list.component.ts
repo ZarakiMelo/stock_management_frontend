@@ -1,5 +1,5 @@
 // src/app/components/item-list/item-list.component.ts
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import { ItemService } from '../../services/item.service';
 import { Item } from '../../models/item.model';
 import { CommonModule } from '@angular/common';
@@ -17,7 +17,7 @@ import { ItemFilterPipe } from '../../pipes/item-filter.pipe';
 export class ItemListComponent implements OnInit {
   items: Item[] = [];
   filter: string = '';
-  categories: string[] = ['Toutes les catégories', 'Catégorie 1', 'Catégorie 2', 'Catégorie 3']; // Ajoutez vos catégories ici
+  categories: string[] = ['Toutes les catégories', 'Rouleau', 'Chemise', 'Pull'];
 
   onCategoryChange(event: Event) {
     const target = event.target as HTMLSelectElement;
@@ -29,16 +29,14 @@ export class ItemListComponent implements OnInit {
   constructor(private itemService: ItemService) {}
 
   ngOnInit(): void {
-    this.loadItems();
-  }
-
-  loadItems(): void {
-    this.itemService.getItems().subscribe(items => this.items = items);
+    this.itemService.items$.subscribe(items => {
+      this.items = items;
+    });
   }
 
   deleteItem(id: string): void {
     this.itemService.deleteItemById(id).subscribe(() => {
-      this.loadItems();
+      // La liste est mise à jour automatiquement via l'Observable items$
     });
   }
 }

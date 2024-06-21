@@ -1,38 +1,47 @@
+// src/app/services/item.service.ts
+
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
+import { tap } from 'rxjs/operators';
 import { Item } from '../models/item.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ItemService {
-  private apiUrl = 'http://localhost:3000/items'; // Exemple d'URL de l'API, à adapter
+  private apiUrl = 'http://localhost:3000/items'; // Assurez-vous que l'URL correspond à votre API
 
-  constructor(private http: HttpClient) {}
+  // Utilisation d'un BehaviorSubject pour stocker la liste d'articles
+  private itemsSubject = new BehaviorSubject<Item[]>([]);
+  items$ = this.itemsSubject.asObservable();
 
-  // Récupérer tous les items
-  getItems(): Observable<Item[]> {
-    return this.http.get<Item[]>(`${this.apiUrl}`);
+  constructor(private http: HttpClient) {
+    this.loadItems();
   }
 
-  // Récupérer un item par son ID
-  getItemById(id: string): Observable<Item> {
-    return this.http.get<Item>(`${this.apiUrl}/${id}`);
+  private loadItems(): void {
+    this.http.get<Item[]>(this.apiUrl).subscribe(items => {
+      this.itemsSubject.next(items);
+    });
   }
 
-  // Mettre à jour un item
-  updateItem(id: string, item: Item): Observable<Item> {
-    return this.http.put<Item>(`${this.apiUrl}/${id}`, item);
-  }
-
-  // Ajouter un nouvel item
   addItem(item: Item): Observable<Item> {
-    return this.http.post<Item>(`${this.apiUrl}`, item);
+    item._id = undefined; 
+    return this.http.post<Item>(this.apiUrl, item).pipe(
+      tap((newItem: Item) => {
+        this.itemsSubject.next([...this.itemsSubject.value, newItem]);
+      })
+    );
   }
 
-  // Supprimer un item par son ID
   deleteItemById(id: string): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+    const url = `${this.apiUrl}/${id}`;
+    return this.http.delete<void>(url).pipe(
+      tap(() => {
+        const updatedItems = this.itemsSubject.value.filter(item => item._id !== id);
+        this.itemsSubject.next(updatedItems);
+      })
+    );
   }
 }
