@@ -1,5 +1,3 @@
-// src/app/services/item.service.ts
-
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
@@ -20,12 +18,20 @@ export class ItemService {
     this.loadItems();
   }
 
+  /**
+   * Charge les articles depuis l'API et met à jour le BehaviorSubject.
+   */
   private loadItems(): void {
     this.http.get<Item[]>(this.apiUrl).subscribe(items => {
       this.itemsSubject.next(items);
     });
   }
 
+  /**
+   * Ajoute un nouvel article en utilisant une requête POST à l'API.
+   * @param item - L'article à ajouter.
+   * @returns Un Observable contenant le nouvel article ajouté.
+   */
   addItem(item: Item): Observable<Item> {
     item._id = undefined; 
     return this.http.post<Item>(this.apiUrl, item).pipe(
@@ -35,6 +41,11 @@ export class ItemService {
     );
   }
 
+  /**
+   * Supprime un article par son identifiant en utilisant une requête DELETE à l'API.
+   * @param id - L'identifiant de l'article à supprimer.
+   * @returns Un Observable qui se complète lorsque l'article est supprimé.
+   */
   deleteItemById(id: string): Observable<void> {
     const url = `${this.apiUrl}/${id}`;
     return this.http.delete<void>(url).pipe(

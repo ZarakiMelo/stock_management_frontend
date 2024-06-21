@@ -1,4 +1,4 @@
-// src/app/components/item-form/item-form.component.ts
+
 import { Component, EventEmitter, Output } from '@angular/core';
 import { Item } from '../../models/item.model';
 import { ItemService } from '../../services/item.service';
@@ -13,8 +13,8 @@ import { FormsModule } from '@angular/forms';
   styleUrls: ['./item-form.component.css'],
 })
 export class ItemFormComponent {
-  @Output() itemAdded = new EventEmitter<Item>();
-  @Output() cancel = new EventEmitter<void>();
+  @Output() itemAdded = new EventEmitter<Item>(); // Événement émis lors de l'ajout d'un article
+  @Output() cancel = new EventEmitter<void>(); // Événement émis lors de l'annulation du formulaire
 
   newItem: Item = {
     name: '',
@@ -25,18 +25,28 @@ export class ItemFormComponent {
     price: 0
   };
 
+  /**
+   * Constructeur de ItemFormComponent.
+   * @param itemService - Service pour gérer les opérations sur les articles.
+   */
   constructor(private itemService: ItemService) {}
 
+  /**
+   * Méthode pour ajouter un nouvel article.
+   * Émet un événement itemAdded avec l'article ajouté et réinitialise le formulaire.
+   */
   addItem(): void {
-    console.log('Form submitted'); // Ajoutez ceci pour vérifier si la méthode est appelée
+    console.log('Form submitted'); // Log pour vérifier l'appel de la méthode
     this.itemService.addItem(this.newItem).subscribe(item => {
-      console.log('Item added:', item); // Ajoutez ceci pour vérifier la réponse de l'API
+      console.log('Item added:', item); // Log pour vérifier la réponse de l'API
       this.itemAdded.emit(item);
       this.resetForm();
     });
   }
-  
 
+  /**
+   * Réinitialise le formulaire en vidant les champs.
+   */
   resetForm(): void {
     this.newItem = {
       name: '',
@@ -48,6 +58,10 @@ export class ItemFormComponent {
     };
   }
 
+  /**
+   * Méthode pour gérer l'annulation du formulaire.
+   * Émet un événement cancel.
+   */
   onCancel(): void {
     this.cancel.emit();
   }

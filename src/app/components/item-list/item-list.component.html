@@ -12,7 +12,8 @@
       <p>Catégorie: {{ item.category }}</p>
       <p>Taille: {{ item.size }}</p>
       <p>Couleur: {{ item.color }}</p>
-      <p>Quantité: {{ item.quantity }}</p>
+      <p>Quantité: {{ item.quantity }} </p>
+      <p>Prix: {{ item.price }} euros l'unité</p>
       <button *ngIf="item._id" class="delete-button" (click)="deleteItem(item._id)">Supprimer</button>
     </div>
  
