@@ -1,25 +1,16 @@
-
-<h2>Items List</h2>
-<table>
-  <tr>
-    <th>Name</th>
-    <th>Category</th>
-    <th>Size</th>
-    <th>Color</th>
-    <th>Quantity</th>
-    <th>Price</th>
-    <th>Actions</th>
-  </tr>
-  <tr *ngFor="let item of items">
-    <td>{{ item.name }}</td>
-    <td>{{ item.category }}</td>
-    <td>{{ item.size }}</td>
-    <td>{{ item.color }}</td>
-    <td>{{ item.quantity }}</td>
-    <td>{{ item.price }}</td>
-    <td>
-      <button (click)="deleteItem(item._id)">Delete</button>
-      <button [routerLink]="['/edit-item', item._id]">Edit</button>
-    </td>
-  </tr>
-</table>
+<!-- src/app/components/item-list/item-list.component.html -->
+<div>
+  <select [(ngModel)]="filter" (change)="onCategoryChange($event)">
+    <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
+  </select>
+  <ul>
+    <li *ngFor="let item of items | itemFilter:filter">
+      <h3>{{ item.name }}</h3>
+      <p>Catégorie: {{ item.category }}</p>
+      <p>Taille: {{ item.size }}</p>
+      <p>Couleur: {{ item.color }}</p>
+      <p>Quantité: {{ item.quantity }}</p>
+      <button (click)="deleteItem(item._id)">Supprimer</button>
+    </li>
+  </ul>
+</div>
